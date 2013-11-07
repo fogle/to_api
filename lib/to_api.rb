@@ -107,13 +107,15 @@ if Object.const_defined? :ActiveRecord
   end
 
   #Sadly, Scope isn't enumerable
-  class ActiveRecord::NamedScope::Scope
-    include ToApiFilter
-    def to_api(*includes)
-      map{|e|
-        e.to_api_filters = to_api_filters if e.respond_to? :to_api_filters
-        e.to_api(*includes)
-      }
+  if defined?(ActiveRecord::NamedScope)
+    class ActiveRecord::NamedScope::Scope
+      include ToApiFilter
+      def to_api(*includes)
+        map{|e|
+          e.to_api_filters = to_api_filters if e.respond_to? :to_api_filters
+          e.to_api(*includes)
+        }
+      end
     end
   end
 end
